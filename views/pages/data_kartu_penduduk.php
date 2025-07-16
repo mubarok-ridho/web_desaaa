@@ -26,7 +26,7 @@
 
 					<?php
               $no = 1;
-              $sql = $koneksi->query("select * from tb_kk");
+              $sql = $koneksi->query("select * from tabel_kependudukan");
               while ($data= $sql->fetch_assoc()) {
             ?>
 

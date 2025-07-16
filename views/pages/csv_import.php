@@ -3,8 +3,8 @@ ob_start();
 session_start();
 
 // Koneksi DB
-include_once $_SERVER['DOCUMENT_ROOT'] . '/simkbs/app/koneksi_data_penduduk.php';
-$koneksi = $mysqli_data_penduduk;
+include_once $_SERVER['DOCUMENT_ROOT'] . '/simkbs/app/koneksi.php';
+$koneksi = $mysqli;
 
 // Import CSV jika dikirim
 if (isset($_POST['import_kk']) && isset($_FILES['csv_kk'])) {
@@ -47,25 +47,35 @@ if (isset($_POST['import_kk']) && isset($_FILES['csv_kk'])) {
 
   // Loop tiap baris
   while (($data = fgetcsv($handle, 1000, $delimiter)) !== FALSE) {
-    if (count($data) < 8) continue;
+    if (count($data) < 20) continue;
 
-    list($no_kk, $kepala, $desa, $rt, $rw, $kec, $kab, $prov) = array_map(
-      fn($val) => mysqli_real_escape_string($koneksi, trim($val)),
-      $data
-    );
+    list(
+        $no_kk, $nik, $nama_lgkp, $hbkel, $jk, $tmpt_lhr, $tgl_lhr, $tahun, $bulan, $hari,
+        $nama_ayah, $nama_ibu, $kecamatan, $kelurahan, $dsn, $agama,
+        $bantuan, $jenis_bantuan, $ibu_hamil, $disabilitas
+    ) = array_map(fn($val) => mysqli_real_escape_string($koneksi, trim($val)), $data);
 
-    if (empty($no_kk) || empty($kepala)) continue;
+    if (empty($no_kk) || empty($nik)) continue;
 
-    $cek = mysqli_query($koneksi, "SELECT no_kk FROM tb_kk WHERE no_kk='$no_kk'");
+    $cek = mysqli_query($koneksi, "SELECT * FROM tabel_kependudukan WHERE NIK = '$nik'");
     if (mysqli_num_rows($cek) == 0) {
-      mysqli_query($koneksi, "INSERT INTO tb_kk (no_kk, kepala, desa, rt, rw, kec, kab, prov)
-                              VALUES ('$no_kk', '$kepala', '$desa', '$rt', '$rw', '$kec', '$kab', '$prov')");
-      $sukses++;
+        $insert = "INSERT INTO tabel_kependudukan (
+            NO_KK, NIK, NAMA_LGKP, HBKEL, JK, TMPT_LHR, TGL_LHR, TAHUN, BULAN, HARI,
+            NAMA_LGKP_AYAH, NAMA_LGKP_IBU, KECAMATAN, KELURAHAN, DSN, AGAMA,
+            bantuan, jenis_bantuan, ibu_hamil, disabilitas
+        ) VALUES (
+            '$no_kk', '$nik', '$nama_lgkp', '$hbkel', '$jk', '$tmpt_lhr', '$tgl_lhr', '$tahun', '$bulan', '$hari',
+            '$nama_ayah', '$nama_ibu', '$kecamatan', '$kelurahan', '$dsn', '$agama',
+            '$bantuan', '$jenis_bantuan', '$ibu_hamil', '$disabilitas'
+        )";
+        mysqli_query($koneksi, $insert);
+        $sukses++;
     } else {
-      $duplikat++;
-      $duplicates[] = $no_kk;
+        $duplikat++;
+        $duplicates[] = $nik;
     }
-  }
+}
+
 
   fclose($handle);
   unlink($tempPath);

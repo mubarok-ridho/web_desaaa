@@ -1,7 +1,7 @@
 <?php
 ob_start(); // Mencegah output sebelum SweetAlert
-include_once __DIR__ . '/../../app/koneksi_data_penduduk.php';
-$koneksi = $mysqli_data_penduduk;
+include_once __DIR__ . '/../../app/koneksi.php';
+$koneksi = $mysqli;
 ?>
 
 <!-- Tambahkan Animate.css & SweetAlert jika belum -->
@@ -19,25 +19,25 @@ $koneksi = $mysqli_data_penduduk;
       <div class="form-group row mb-3">
         <label class="col-sm-2 col-form-label">No KK</label>
         <div class="col-sm-6">
-          <input type="text" class="form-control" name="no_kk" placeholder="Masukkan No KK" required>
+          <input type="text" class="form-control" name="NO_KK" placeholder="Masukkan No KK" required>
         </div>
       </div>
 
       <div class="form-group row mb-3">
         <label class="col-sm-2 col-form-label">Kepala Keluarga</label>
         <div class="col-sm-6">
-          <input type="text" class="form-control" name="kepala" placeholder="Nama Kepala Keluarga" required>
+          <input type="text" class="form-control" name="NAMA_LGKP" placeholder="Nama Kepala Keluarga" required>
         </div>
       </div>
 
       <div class="form-group row mb-3">
         <label class="col-sm-2 col-form-label">Desa</label>
         <div class="col-sm-6">
-          <input type="text" class="form-control" name="desa" placeholder="Nama Desa" required>
+          <input type="text" class="form-control" name="DSN" placeholder="Nama Desa" required>
         </div>
       </div>
 
-      <div class="form-group row mb-3">
+      <!-- <div class="form-group row mb-3">
         <label class="col-sm-2 col-form-label">RT / RW</label>
         <div class="col-sm-3">
           <input type="text" class="form-control" name="rt" placeholder="RT" required>
@@ -45,29 +45,36 @@ $koneksi = $mysqli_data_penduduk;
         <div class="col-sm-3">
           <input type="text" class="form-control" name="rw" placeholder="RW" required>
         </div>
+      </div> -->
+      
+      <div class="form-group row mb-3">
+        <label class="col-sm-2 col-form-label">Kelurahan</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" name="KELURAHAN" placeholder="Kelurahan" required>
+        </div>
       </div>
 
       <div class="form-group row mb-3">
         <label class="col-sm-2 col-form-label">Kecamatan</label>
         <div class="col-sm-6">
-          <input type="text" class="form-control" name="kec" placeholder="Kecamatan" required>
+          <input type="text" class="form-control" name="KECAMATAN" placeholder="Kecamatan" required>
         </div>
       </div>
 
-      <div class="form-group row mb-3">
+      <!-- <div class="form-group row mb-3">
         <label class="col-sm-2 col-form-label">Kabupaten</label>
         <div class="col-sm-6">
           <input type="text" class="form-control" name="kab" placeholder="Kabupaten" required>
         </div>
-      </div>
+      </div> -->
 
-      <div class="form-group row mb-3">
+      <!-- <div class="form-group row mb-3">
         <label class="col-sm-2 col-form-label">Provinsi</label>
         <div class="col-sm-6">
           <input type="text" class="form-control" name="prov" placeholder="Provinsi" required>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="card-footer d-flex justify-content-between">
       <button type="submit" name="Simpan" class="btn btn-primary">
@@ -82,15 +89,12 @@ $koneksi = $mysqli_data_penduduk;
 
 <?php
 if (isset($_POST['Simpan'])) {
-  $sql_simpan = "INSERT INTO tb_kk (no_kk, kepala, desa, rt, rw, kec, kab, prov) VALUES (
-    '" . $_POST['no_kk'] . "',
-    '" . $_POST['kepala'] . "',
-    '" . $_POST['desa'] . "',
-    '" . $_POST['rt'] . "',
-    '" . $_POST['rw'] . "',
-    '" . $_POST['kec'] . "',
-    '" . $_POST['kab'] . "',
-    '" . $_POST['prov'] . "'
+  $sql_simpan = "INSERT INTO tabel_kependudukan (NO_KK, NAMA_LGKP, DSN, KELURAHAN, KECAMATAN) VALUES (
+    '" . $_POST['NO_KK'] . "',
+    '" . $_POST['NAMA_LGKP'] . "',
+    '" . $_POST['DSN'] . "',
+    '" . $_POST['KELURAHAN'] . "',
+    '" . $_POST['KECAMATAN'] . "'
   )";
 
   $query_simpan = mysqli_query($koneksi, $sql_simpan);

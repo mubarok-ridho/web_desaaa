@@ -1,7 +1,7 @@
 <?php
 session_start(); // <- WAJIB ADA!
-include_once __DIR__ . '/../../../app/koneksi_data_penduduk.php';
-$koneksi = $mysqli_data_penduduk;
+include_once __DIR__ . '/../../../app/koneksi.php';
+$koneksi = $mysqli;
 ?>
 
 <!-- Font Awesome CDN -->
@@ -111,9 +111,9 @@ $koneksi = $mysqli_data_penduduk;
       </h3>
       <div class="d-flex flex-wrap align-items-center">
   <!-- Tombol Tambah Data -->
-  <a href="index.php?page=kartu-add" title="Tambah Data" class="btn btn-primary btn-sm mr-2 mb-2">
+  <!-- <a href="index.php?page=kartu-add" title="Tambah Data" class="btn btn-primary btn-sm mr-2 mb-2">
     <i class="fa fa-plus-circle"></i> Tambah Data
-  </a>
+  </a> -->
 
   <!-- Form Upload CSV -->
   <form method="post" action="views/pages/csv_import.php" enctype="multipart/form-data" class="form-inline mb-2">
@@ -143,26 +143,35 @@ $koneksi = $mysqli_data_penduduk;
         <tbody>
           <?php
           $no = 1;
-          $sql = $koneksi->query("SELECT * FROM tb_kk ORDER BY id_kk DESC");
+          $sql = $koneksi->query("
+  SELECT tk.*, td.dusun
+  FROM tabel_kependudukan tk
+  LEFT JOIN tabel_dusun td ON tk.DSN = td.id
+  WHERE tk.HBKEL = '1'
+  ORDER BY tk.NO_KK DESC
+");
+
+
           while ($data = $sql->fetch_assoc()) {
           ?>
             <tr>
               <td class="text-center"><?= $no++; ?></td>
-              <td><?= htmlspecialchars($data['no_kk']); ?></td>
-              <td><?= htmlspecialchars($data['kepala']); ?></td>
-              <td><?= htmlspecialchars($data['desa']); ?>, RT <?= htmlspecialchars($data['rt']); ?>/RW <?= htmlspecialchars($data['rw']); ?></td>
+              <td><?= htmlspecialchars($data['NO_KK']); ?></td>
+              <td><?= htmlspecialchars($data['NAMA_LGKP']); ?></td>
+              <td><?= htmlspecialchars($data['dusun']); ?>, Kecamatan <?= htmlspecialchars($data['KECAMATAN']); ?>/Kelurahan <?= htmlspecialchars($data['KELURAHAN']); ?></td>
               <td class="text-center">
-                <a href="index.php?page=anggota_kk&kode=<?= $data['id_kk']; ?>" class="btn btn-outline-info btn-sm" title="Lihat Anggota KK">
+                <a href="index.php?page=anggota_kk&kode=<?= $data['NO_KK']; ?>" class="btn btn-outline-info btn-sm" title="Lihat Anggota KK">
                   <i class="fa fa-users"></i> Lihat
                 </a>
               </td>
               <td class="text-center">
-                <a href="index.php?page=kartu-edit&kode=<?= $data['id_kk']; ?>" class="btn btn-outline-success btn-sm" title="Edit Data">
+                <a href="index.php?page=kartu-edit&nik=<?= $data['NIK'] ?>&kk=<?= $data['NO_KK'] ?>" class="btn btn-warning btn-sm">
                   <i class="fa fa-edit"></i> Edit
                 </a>
-                <a href="index.php?page=kartu-delete&kode=<?= $data['id_kk']; ?>" class="btn btn-outline-danger btn-sm" title="Hapus Data" onclick="return confirm('Yakin ingin menghapus data ini?');">
+
+                <!-- <a href="index.php?page=kartu-delete&kode=<?= $data['NO_KK']; ?>" class="btn btn-outline-danger btn-sm" title="Hapus Data" onclick="return confirm('Yakin ingin menghapus data ini?');">
                   <i class="fa fa-trash"></i> Hapus
-                </a>
+                </a> -->
               </td>
             </tr>
           <?php } ?>

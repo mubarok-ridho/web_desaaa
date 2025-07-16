@@ -1,15 +1,16 @@
 <?php
-include_once __DIR__ . '/../../app/koneksi_data_penduduk.php';
-$koneksi = $mysqli_data_penduduk;
+include_once __DIR__ . '/../../app/koneksi.php';
+$koneksi = $mysqli;
 
 if (!$koneksi) {
     die("Koneksi database gagal.");
 }
 
-if (isset($_GET['kode'])) {
-    $id_kk = $_GET['kode'];
+if (isset($_GET['nik']) && isset($_GET['kk'])) {
+  $nik = $_GET['nik'];
+  $kk = $_GET['kk'];
 
-    $sql_hapus = "DELETE FROM tb_kk WHERE id_kk='$id_kk'";
+    $sql_hapus = "DELETE FROM tabel_kependudukan WHERE NIK ='$nik'";
     $query_hapus = mysqli_query($koneksi, $sql_hapus);
 
     if ($query_hapus) {

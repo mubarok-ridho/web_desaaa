@@ -91,11 +91,11 @@
                                  <select class="form-control select2 jkjk" name="hubkel" style="width: 100%;">
                                      <option hidden>--Pilih Hubungan Keluarga--</option>
                                      <option value="1">Kepala Keluarga</option>
-                                     <option value="3">Istri</option>
-                                     <option value="9">Anak</option>
-                                     <option value="7">Kakek</option>
-                                     <option value="6">Nenek</option>
-                                     <option value="4">Family Lain</option>
+                                     <option value="2">Istri</option>
+                                     <option value="3">Anak</option>
+                                     <option value="4">Kakek</option>
+                                     <option value="5">Nenek</option>
+                                     <option value="6">Family Lain</option>
                                  </select>
                              </div>
                          </div>

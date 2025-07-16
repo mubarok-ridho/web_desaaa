@@ -70,7 +70,7 @@
 
     if (isset ($_POST['Simpan'])){
     //mulai proses simpan data
-        $sql_simpan = "INSERT INTO tb_kk (no_kk, kepala, desa, rt, rw, kec, kab, prov) VALUES (
+        $sql_simpan = "INSERT INTO tabel_kependudukan (no_kk, kepala, desa, rt, rw, kec, kab, prov) VALUES (
             '".$_POST['no_kk']."',
             '".$_POST['kepala']."',
             '".$_POST['desa']."',

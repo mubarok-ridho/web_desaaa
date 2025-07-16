@@ -1,123 +1,68 @@
 <?php
-include_once __DIR__ . '/../../app/koneksi_data_penduduk.php';
-$koneksi = $mysqli_data_penduduk;
+include_once __DIR__ . '/../../app/koneksi.php';
+$koneksi = $mysqli;
 
-if (isset($_GET['kode'])) {
-  $id_kk = $_GET['kode'];
-  $sql_cek = "SELECT * FROM tb_kk WHERE id_kk='$id_kk'";
+$data_cek = null;
+$dusunList = [];
+
+// Default redirect
+$redirectPage = "http://localhost/simkbs/data_kependudukan";
+if (isset($_GET['from']) && $_GET['from'] === 'anggota_kk' && isset($_GET['kode'])) {
+  $redirectPage = 'index.php?page=anggota_kk&kode=' . $_GET['kode'];
+}
+
+// Ambil data dusun
+$dusunQuery = mysqli_query($koneksi, "SELECT * FROM tabel_dusun ORDER BY id ASC");
+while ($d = mysqli_fetch_assoc($dusunQuery)) {
+  $dusunList[] = $d;
+}
+
+// Ambil data penduduk
+if (isset($_GET['nik'])) {
+  $nik = $_GET['nik'];
+  $sql_cek = "SELECT * FROM tabel_kependudukan WHERE NIK = '$nik'";
   $query_cek = mysqli_query($koneksi, $sql_cek);
   $data_cek = mysqli_fetch_array($query_cek, MYSQLI_BOTH);
 }
-?>
 
-<div class="card card-success mt-5">
-  <div class="card-header">
-    <h3 class="card-title">
-      <i class="fa fa-edit"></i> Ubah Data KK
-    </h3>
-  </div>
+// Jika tidak ditemukan
+if (!$data_cek) {
+  echo "<script>
+    alert('Data tidak ditemukan!');
+  window.history.back();
+  </script>";
+  exit;
+}
 
-  <form action="" method="post">
-    <div class="card-body">
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">ID Sistem</label>
-        <div class="col-sm-4">
-          <input type="text" class="form-control" name="id_kk" value="<?= $data_cek['id_kk'] ?>" readonly>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">No KK</label>
-        <div class="col-sm-6">
-          <input type="text" class="form-control" name="no_kk" value="<?= $data_cek['no_kk'] ?>" required>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Kepala Keluarga</label>
-        <div class="col-sm-6">
-          <input type="text" class="form-control" name="kepala" value="<?= $data_cek['kepala'] ?>" required>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Desa</label>
-        <div class="col-sm-6">
-          <input type="text" class="form-control" name="desa" value="<?= $data_cek['desa'] ?>" required>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">RT / RW</label>
-        <div class="col-sm-3">
-          <input type="text" class="form-control" name="rt" value="<?= $data_cek['rt'] ?>" required placeholder="RT">
-        </div>
-        <div class="col-sm-3">
-          <input type="text" class="form-control" name="rw" value="<?= $data_cek['rw'] ?>" required placeholder="RW">
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Kecamatan</label>
-        <div class="col-sm-6">
-          <input type="text" class="form-control" name="kec" value="<?= $data_cek['kec'] ?>" required>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Kabupaten</label>
-        <div class="col-sm-6">
-          <input type="text" class="form-control" name="kab" value="<?= $data_cek['kab'] ?>" required>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Provinsi</label>
-        <div class="col-sm-6">
-          <input type="text" class="form-control" name="prov" value="<?= $data_cek['prov'] ?>" required>
-        </div>
-      </div>
-    </div>
-
-    <div class="card-footer">
-      <button type="submit" name="Ubah" class="btn btn-success">
-        <i class="fa fa-save"></i> Simpan Perubahan
-      </button>
-      <a href="?page=data-kartu" class="btn btn-secondary">Batal</a>
-    </div>
-  </form>
-</div>
-
-<?php
+// Proses update
 if (isset($_POST['Ubah'])) {
-  $sql_ubah = "UPDATE tb_kk SET 
-    no_kk = '" . $_POST['no_kk'] . "',
-    kepala = '" . $_POST['kepala'] . "',
-    desa = '" . $_POST['desa'] . "',
-    rt = '" . $_POST['rt'] . "',
-    rw = '" . $_POST['rw'] . "',
-    kec = '" . $_POST['kec'] . "',
-    kab = '" . $_POST['kab'] . "',
-    prov = '" . $_POST['prov'] . "'
-    WHERE id_kk = '" . $_POST['id_kk'] . "'";
+  $sql_ubah = "UPDATE tabel_kependudukan SET 
+    NAMA_LGKP = '" . $_POST['NAMA_LGKP'] . "',
+    HBKEL = '" . $_POST['HBKEL'] . "',
+    JK = '" . $_POST['JK'] . "',
+    DSN = '" . $_POST['DSN'] . "',
+    KECAMATAN = '" . $_POST['KECAMATAN'] . "',
+    KELURAHAN = '" . $_POST['KELURAHAN'] . "'
+    WHERE NIK = '" . $_POST['NIK'] . "'";
 
   $query_ubah = mysqli_query($koneksi, $sql_ubah);
   mysqli_close($koneksi);
 
   if ($query_ubah) {
+    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
     echo "<script>
       Swal.fire({
-        title: '✅ Data KK Berhasil Diubah!',
-        text: 'Perubahan telah disimpan.',
+        title: '✅ Berhasil!',
+        text: 'Data berhasil diubah.',
         icon: 'success',
-        showConfirmButton: true,
-        confirmButtonText: 'Kembali'
+        confirmButtonText: 'OK'
       }).then((result) => {
         if (result.isConfirmed) {
-          window.location = 'data_kependudukan?tab=kk';
+          window.location.href = '$redirectPage';
         }
       });
     </script>";
+    exit;
   } else {
     echo "<script>
       Swal.fire({
@@ -130,3 +75,141 @@ if (isset($_POST['Ubah'])) {
   }
 }
 ?>
+
+<style>
+  .card {
+    margin-top: 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .card-header {
+    background-color: #d4f1f9;
+    border-bottom: 1px solid #c0e0eb;
+    font-weight: bold;
+    color: #004d66;
+  }
+
+  .form-group {
+    margin-bottom: 1.2rem;
+  }
+
+  .form-group label {
+    font-weight: 500;
+  }
+
+  .btn {
+    padding: 0.45rem 1rem;
+    font-size: 0.95rem;
+    border-radius: 6px;
+  }
+
+  .btn-success {
+    background-color: #8ee4af;
+    border-color: #5cc3a3;
+    color: #004d3c;
+  }
+
+  .btn-secondary {
+    background-color: #eee;
+    color: #444;
+  }
+
+  @media (max-width: 768px) {
+    .form-group.row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<div class="card card-success">
+  <div class="card-header">
+    <h3 class="card-title"><i class="fa fa-edit"></i> Ubah Data KK</h3>
+  </div>
+
+  <form action="" method="post" class="p-3">
+    <div class="form-group row">
+      <label class="col-sm-3 col-form-label">NIK</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" name="NIK" value="<?= $data_cek['NIK'] ?>" readonly>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-sm-3 col-form-label">No KK</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" value="<?= $data_cek['NO_KK'] ?>" readonly>
+        <input type="hidden" name="NO_KK" value="<?= $data_cek['NO_KK'] ?>">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-sm-3 col-form-label">Nama</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" name="NAMA_LGKP" value="<?= $data_cek['NAMA_LGKP'] ?>" required>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-sm-3 col-form-label">Hubungan Keluarga</label>
+      <div class="col-sm-6">
+        <select class="form-control" name="HBKEL" required>
+          <option hidden value="">-- Pilih Hubungan --</option>
+          <option value="1" <?= $data_cek['HBKEL'] == 1 ? 'selected' : '' ?>>Kepala Keluarga</option>
+          <option value="2" <?= $data_cek['HBKEL'] == 2 ? 'selected' : '' ?>>Istri</option>
+          <option value="3" <?= $data_cek['HBKEL'] == 3 ? 'selected' : '' ?>>Anak</option>
+          <option value="4" <?= $data_cek['HBKEL'] == 4 ? 'selected' : '' ?>>Kakek</option>
+          <option value="5" <?= $data_cek['HBKEL'] == 5 ? 'selected' : '' ?>>Nenek</option>
+          <option value="6" <?= $data_cek['HBKEL'] == 6 ? 'selected' : '' ?>>Family Lain</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-sm-3 col-form-label">Jenis Kelamin</label>
+      <div class="col-sm-6">
+        <select class="form-control" name="JK" required>
+          <option hidden value="">-- Pilih Jenis Kelamin --</option>
+          <option value="1" <?= $data_cek['JK'] == 1 ? 'selected' : '' ?>>Laki-laki</option>
+          <option value="2" <?= $data_cek['JK'] == 2 ? 'selected' : '' ?>>Perempuan</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-sm-3 col-form-label">Dusun</label>
+      <div class="col-sm-6">
+        <select class="form-control" name="DSN" required>
+          <option hidden value="">-- Pilih Dusun --</option>
+          <?php foreach ($dusunList as $dusun): ?>
+            <option value="<?= $dusun['id'] ?>" <?= $data_cek['DSN'] == $dusun['id'] ? 'selected' : '' ?>>
+              <?= htmlspecialchars($dusun['dusun']) ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-sm-3 col-form-label">Kecamatan</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" name="KECAMATAN" value="<?= $data_cek['KECAMATAN'] ?>" required>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-sm-3 col-form-label">Kelurahan</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" name="KELURAHAN" value="<?= $data_cek['KELURAHAN'] ?>" required>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <button type="submit" name="Ubah" class="btn btn-success">
+        <i class="fa fa-save"></i> Simpan Perubahan
+      </button>
+      <a href="<?= $redirectPage ?>" class="btn btn-secondary">Batal</a>
+    </div>
+  </form>
+</div>

@@ -1,6 +1,6 @@
 <?php 
 // koneksi ke database KK (dari Data-Kependudukan)
-include 'koneksi_data_penduduk.php'; 
+include 'koneksi.php'; 
 ?>
 
 <div class="card card-info">
@@ -32,7 +32,7 @@ include 'koneksi_data_penduduk.php';
 				<tbody>
 					<?php
 					$no = 1;
-					$sql = $koneksi->query("SELECT * FROM tb_kk");
+					$sql = $koneksi->query("SELECT * FROM tabel_kependudukan");
 					while ($data = $sql->fetch_assoc()) {
 					?>
 						<tr>

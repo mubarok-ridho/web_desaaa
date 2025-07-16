@@ -30,9 +30,9 @@ if (isset($_POST['import_kk'])) {
     $kab = $data[6];
     $prov = $data[7];
 
-    $cek = mysqli_query($koneksi, "SELECT no_kk FROM tb_kk WHERE no_kk='$no_kk'");
+    $cek = mysqli_query($koneksi, "SELECT no_kk FROM tabel_kependudukan WHERE no_kk='$no_kk'");
     if (mysqli_num_rows($cek) == 0) {
-      mysqli_query($koneksi, "INSERT INTO tb_kk (no_kk, kepala, desa, rt, rw, kec, kab, prov) VALUES ('$no_kk', '$kepala', '$desa', '$rt', '$rw', '$kec', '$kab', '$prov')");
+      mysqli_query($koneksi, "INSERT INTO tabel_kependudukan (no_kk, kepala, desa, rt, rw, kec, kab, prov) VALUES ('$no_kk', '$kepala', '$desa', '$rt', '$rw', '$kec', '$kab', '$prov')");
     }
   }
   fclose($handle);
