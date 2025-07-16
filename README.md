@@ -8,4 +8,4 @@ Sistem Informasi Manajemen Kependudukan Dan Bantuan Sosial menggunakan PHP dan M
 ## Dashboard
 ![](preview2.png)
 Kependudukan dan Bantuan Sosial
-Pemerintah Desa Kaliputih
+Pemerintah Desa Kaliputih# simbks_dummy
