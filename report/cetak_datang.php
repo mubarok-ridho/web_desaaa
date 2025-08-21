@@ -1,109 +1,74 @@
 <?php
-	include "../inc/koneksi.php";
-	
-	if (isset ($_POST['Cetak'])){
-	$id = $_POST['id_datang'];
-	}
+session_start();
+include "../app/koneksi.php"; 
+$koneksi = $mysqli;
 
-	$tanggal = date("m/y");
-	$tgl = date("d/m/y");
+if (isset($_POST['btnCetak'])) {
+    $id = $_POST['id_datang'];
+    $tgl_datang = $_POST['tgl_datang']; // <-- ambil dari input manual
+
+    $sql_tampil = "SELECT * FROM tabel_kependudukan WHERE NIK = '$id'";
+    $query_tampil = mysqli_query($koneksi, $sql_tampil);
+
+    if ($query_tampil && mysqli_num_rows($query_tampil) > 0) {
+        $data = mysqli_fetch_assoc($query_tampil);
+    } else {
+        echo "<script>alert('Data tidak ditemukan!'); window.history.back();</script>";
+        exit;
+    }
+
+    $tanggal = date("m/y");
+    $tgl = date("d/m/y");
+
+    // manipulasi JK
+    $jk = $data['JK'] == '1' ? "Laki-laki" : ($data['JK'] == '2' ? "Perempuan" : "Tidak Diketahui");
+
+} else {
+    echo "<script>alert('Tidak ada data yang dipilih!'); window.history.back();</script>";
+    exit;
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<title>CETAK SURAT</title>
+    <meta charset="UTF-8">
+    <title>CETAK SURAT</title>
+    <style>
+        table { margin:auto; }
+        td { padding:5px 10px; }
+    </style>
 </head>
-
 <body>
-	<center>
+<center>
+    <h2>PEMERINTAH KABUPATEN BANTUL</h2>
+    <h3>KECAMATAN KASIHAN <br>DESA TAMANTIRTO</h3>
+    <hr style="width:80%;">
+    
+    <h4><u>SURAT KETERANGAN PENDATANG</u></h4>
+    <h4>No Surat : <?php echo $id; ?>/Ket.Pendatang/<?php echo $tanggal; ?></h4>
 
-		<h2>PEMERINTAH KABUPATEN BANTUL</h2>
-		<h3>KECAMATAN KASIHAN
-			<br>DESA TAMANTIRTO</h3>
-		<p>________________________________________________________________________</p>
+    <p>Yang bertandatangan di bawah ini Kepala Desa Tamantirto, Kecamatan Kasihan, Kabupaten Bantul, dengan ini menerangkan bahwa :</p>
 
-		<?php
-			$sql_tampil = "select * from tb_datang
-			where id_datang ='$id'";
-			
-			$query_tampil = mysqli_query($koneksi, $sql_tampil);
-			$no=1;
-			while ($data = mysqli_fetch_array($query_tampil,MYSQLI_BOTH)) {
-		?>
-	</center>
+    <table>
+        <tr><td>NIK</td><td>:</td><td><?php echo $data['NIK']; ?></td></tr>
+        <tr><td>Nama</td><td>:</td><td><?php echo $data['NAMA_LGKP']; ?></td></tr>
+        <tr><td>Jenis Kelamin</td><td>:</td><td><?php echo $jk; ?></td></tr>
+        <tr><td>Tanggal Datang</td><td>:</td><td><?php echo date("d-m-Y", strtotime($tgl_datang)); ?></td></tr>
+    </table>
 
-	<center>
-		<h4>
-			<u>SURAT KETARANGAN PENDATANG</u>
-		</h4>
-		<h4>No Surat :
-			<?php echo $data['id_datang']; ?>/Ket.Pendatang/
-			<?php echo $tanggal; ?>
-		</h4>
-	</center>
-	<p>Yang bertandatangan dibawah ini Kepala Desa Tamantirto Kecamatan Kasihan Kabupaten Bantul, dengan ini menerangkan
-		bahawa :</P>
-	<table>
-		<tbody>
-			<tr>
-				<td>NIK</td>
-				<td>:</td>
-				<td>
-					<?php echo $data['nik']; ?>
-				</td>
-			</tr>
-			<tr>
-				<td>Nama</td>
-				<td>:</td>
-				<td>
-					<?php echo $data['nama_datang']; ?>
-				</td>
-			</tr>
-			<tr>
-				<td>Jenis Kelamin</td>
-				<td>:</td>
-				<td>
-					<?php echo $data['jekel']; ?>
-				</td>
-			</tr>
-			<tr>
-				<td>Tanggal Datang</td>
-				<td>:</td>
-				<td>
-					<?php echo $data['tgl_datang']; ?>
-				</td>
-			</tr>
-			<?php } ?>
-		</tbody>
-	</table>
-	<p>Benar-benar Telah datang dan berencana untuk tinggal di Desa Tamantirto, Kecamatan Kasihan, Kabupuaten Bantul.</P>
-	<p>Demikian Surat ini dibuat, agar dapat digunakan sebagaimana mestinya.</P>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<p align="right">
-		Bantul,
-		<?php echo $tgl; ?>
-		<br> KEPALA DESA TAMANTIRTO
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>(         WISNU ARDI           )
-	</p>
+    <p>Benar-benar telah datang dan berencana untuk tinggal di Desa Tamantirto, Kecamatan Kasihan, Kabupaten Bantul.</p>
+    <p>Demikian surat ini dibuat agar dapat digunakan sebagaimana mestinya.</p>
 
+    <p align="right">
+        Bantul, <?php echo $tgl; ?><br>
+        KEPALA DESA TAMANTIRTO<br><br><br><br>
+        ( WISNU ARDI )
+    </p>
+</center>
 
-	<script>
-		window.print();
-	</script>
-
+<script>
+    window.print();
+</script>
 </body>
-
 </html>

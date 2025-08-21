@@ -31,6 +31,9 @@ if (isset($_GET['views_user']) && $_GET['views_user'] == "beranda") {
 } else if (isset($_GET['views_user']) && $_GET['views_user'] == "list_data") {
     include 'views/pages/user/list_data.php';
 
+} else if (isset($_GET['views_user']) && $_GET['views_user'] == "data_kartu_kk") {
+    include 'views/pages/user/data_kartu_kk.php';
+
 } else if (isset($_GET['page']) && $_GET['page'] == "data_kependudukan") {
     include 'views/pages/data_kependudukan.php';
 

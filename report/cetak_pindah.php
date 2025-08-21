@@ -1,102 +1,83 @@
 <?php
-	include "../inc/koneksi.php";
-	
-	if (isset ($_POST['Cetak'])){
-	$id = $_POST['id_pend'];
-	}
+session_start();
+include "../app/koneksi.php"; // pastikan path sudah benar
+$koneksi = $mysqli;
 
-	$tanggal = date("m/y");
-	$tgl = date("d/m/y");
+if (isset($_POST['btnCetak'])) {
+    $id = $_POST['id_pend']; // NIK / id_pend
+}
+
+$tanggal = date("m/y");
+$tgl = date("d/m/y");
 ?>
 
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
-	<title>CETAK SURAT</title>
+    <meta charset="UTF-8">
+    <title>CETAK SURAT PINDAH</title>
 </head>
 
 <body>
-	<center>
+    <center>
+        <h2>PEMERINTAH KABUPATEN BANTUL</h2>
+        <h3>KECAMATAN KASIHAN <br> DESA TAMANTIRTO</h3>
+        <p>________________________________________________________________________</p>
 
-		<h2>PEMERINTAH KABUPATEN BANTUL</h2>
-		<h3>KECAMATAN KASIHHAN 
-			<br>DESA TAMANTIRTO</h3>
-		<p>________________________________________________________________________</p>
+        <?php
+		    $nik = $_POST['id_pend']; // NIK sebagai identifier unik
 
-		<?php
-			$sql_tampil = "select * from tb_pdd
-			where status='Pindah' and id_pend ='$id'";
-			
-			$query_tampil = mysqli_query($koneksi, $sql_tampil);
-			$no=1;
-			while ($data = mysqli_fetch_array($query_tampil,MYSQLI_BOTH)) {
-		?>
-	</center>
+    	$sql_tampil = "SELECT * FROM tabel_kependudukan WHERE NIK = '$nik'";
+        $query_tampil = mysqli_query($koneksi, $sql_tampil);
+        while ($data = mysqli_fetch_array($query_tampil, MYSQLI_BOTH)) {
+        ?>
+    </center>
 
-	<center>
-		<h4>
-			<u>SURAT KETARANGAN PINDAH</u>
-		</h4>
-		<h4>No Surat :
-			<?php echo $data['id_pend']; ?>/Ket.Pindah/
-			<?php echo $tanggal; ?>
-		</h4>
-	</center>
-	<p>Yang bertandatangan dibawah ini Kepala Desa Tamantirto, Kecamatan Kasihan, Kabupaten Bantul, dengan ini menerangkan
-		bahawa :</P>
-	<table>
-		<tbody>
-			<tr>
-				<td>NIK</td>
-				<td>:</td>
-				<td>
-					<?php echo $data['nik']; ?>
-				</td>
-			</tr>
-			<tr>
-				<td>Nama</td>
-				<td>:</td>
-				<td>
-					<?php echo $data['nama']; ?>
-				</td>
-			</tr>
-			<tr>
-				<td>TTL</td>
-				<td>:</td>
-				<td>
-					<?php echo $data['tempat_lh']; ?>/
-					<?php echo $data['tgl_lh']; ?>
-				</td>
-			</tr>
-			<?php } ?>
-		</tbody>
-	</table>
-	<p>Telah benar-benar Pindah dari Desa Tamantirto, Kecamatan Kasihan Kabupuaten Bantul.</P>
-	<p>Demikian Surat ini dibuat, agar dapat digunakan sebagai mana mestinya.</P>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<p align="right">
-		Bantul,
-		<?php echo $tgl; ?>
-		<br> KEPALA DESA TAMANTIRTO
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>(         WISNU ARDI           )
-	</p>
+    <center>
+        <h4><u>SURAT KETERANGAN PINDAH</u></h4>
+        <h4>No Surat : <?php echo $data['NIK']; ?>/Ket.Pindah/<?php echo $tanggal; ?></h4>
+    </center>
 
+    <p>Yang bertandatangan di bawah ini Kepala Desa Tamantirto, Kecamatan Kasihan, Kabupaten Bantul,
+        dengan ini menerangkan bahwa:</p>
 
-	<script>
-		window.print();
-	</script>
+    <table>
+        <tbody>
+            <tr>
+                <td>NIK</td>
+                <td>:</td>
+                <td><?php echo $data['NIK']; ?></td>
+            </tr>
+            <tr>
+                <td>Nama</td>
+                <td>:</td>
+                <td><?php echo $data['NAMA_LGKP']; ?></td>
+            </tr>
+            <tr>
+                <td>Tempat/Tanggal Lahir</td>
+                <td>:</td>
+                <td><?php echo $data['TMPT_LHR']; ?> / <?php echo date("d-m-Y", strtotime($data['TGL_LHR'])); ?></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Benar-benar telah <b>Pindah</b> dari Desa Tamantirto, Kecamatan Kasihan, Kabupaten Bantul.</p>
+    <p>Demikian surat ini dibuat untuk dipergunakan sebagaimana mestinya.</p>
+
+    <br><br><br>
+    <p align="right">
+        Bantul, <?php echo $tgl; ?><br>
+        KEPALA DESA TAMANTIRTO
+        <br><br><br><br><br>
+        ( WISNU ARDI )
+    </p>
+
+    <?php } ?>
+
+    <script>
+        window.print();
+    </script>
 
 </body>
 

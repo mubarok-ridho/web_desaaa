@@ -1,103 +1,71 @@
 <?php
-	include "../inc/koneksi.php";
-	
-	if (isset ($_POST['btnCetak'])){
-	$id = $_POST['id_pend'];
-	}
+session_start();
+include "../app/koneksi.php"; // pastikan path sudah benar
+$koneksi = $mysqli;
 
-	$tanggal = date("m/y");
-	$tgl = date("d/m/y");
+// cek apakah form cetak dikirim
+if (isset($_POST['btnCetak'])) {
+    $nik = $_POST['id_pend']; // NIK sebagai identifier unik
+
+    // ambil data penduduk berdasarkan NIK
+    $sql_tampil = "SELECT * FROM tabel_kependudukan WHERE NIK = '$nik'";
+    $query_tampil = mysqli_query($koneksi, $sql_tampil);
+
+    if ($query_tampil && mysqli_num_rows($query_tampil) > 0) {
+        $data = mysqli_fetch_assoc($query_tampil);
+    } else {
+        echo "<script>alert('Data tidak ditemukan!'); window.history.back();</script>";
+        exit;
+    }
+
+    $tanggal = date("m/y");
+    $tgl = date("d/m/y");
+} else {
+    echo "<script>alert('Tidak ada data yang dipilih!'); window.history.back();</script>";
+    exit;
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<title>CETAK SURAT</title>
+    <meta charset="UTF-8">
+    <title>CETAK SURAT</title>
+    <style>
+        table { margin:auto; }
+        td { padding:5px 10px; }
+    </style>
 </head>
-
 <body>
-	<center>
+<center>
+    <h2>PEMERINTAH KABUPATEN BANTUL</h2>
+    <h3>KECAMATAN KASIHAN <br>DESA TAMANTIRTO</h3>
+    <hr style="width:80%;">
+    
+    <h4><u>SURAT KETERANGAN DOMISILI</u></h4>
+    <h4>No Surat : <?php echo $data['NO_KK']; ?>/Ket.Domisili/<?php echo $tanggal; ?></h4>
 
-		<h2>PEMERINTAH KABUPATEN BANTUL</h2>
-		<h3>KECAMATAN KASIHAN 
-			<br>DESA TAMANTIRTO</h3>
-		<p>________________________________________________________________________</p>
+    <p>Yang bertandatangan dibawah ini Kepala Desa Tamantirto, Kecamatan Kasihan, Kabupaten Bantul, dengan ini menerangkan bahwa :</p>
 
-		<?php
-			$sql_tampil = "select * from tb_pdd
-			where id_pend ='$id'";
-			
-			$query_tampil = mysqli_query($koneksi, $sql_tampil);
-			$no=1;
-			while ($data = mysqli_fetch_array($query_tampil,MYSQLI_BOTH)) {
-		?>
-	</center>
+    <table>
+        <tr><td>NIK</td><td>:</td><td><?php echo $data['NIK']; ?></td></tr>
+        <tr><td>Nama</td><td>:</td><td><?php echo $data['NAMA_LGKP']; ?></td></tr>
+        <tr><td>Jenis Kelamin</td><td>:</td><td><?php echo ($data['JK'] == 1) ? 'Laki-laki' : 'Perempuan'; ?></td></tr>
+        <tr><td>TTL</td><td>:</td><td><?php echo $data['TMPT_LHR']; ?> / <?php echo $data['TGL_LHR']; ?></td></tr>
+    </table>
 
-	<center>
-		<h4>
-			<u>SURAT KETARANGAN DOMISILI</u>
-		</h4>
-		<h4>No Surat :
-			<?php echo $data['id_pend']; ?>/Ket.Domisili/
-			<?php echo $tanggal; ?>
-		</h4>
-	</center>
-	<p>Yang bertandatangan dibawah ini Kepala Desa Tamntirot, Kecamatan Kasihan, Kabupaten Bantul, dengan ini menerangkan
-		bahawa :</P>
-	<table>
-		<tbody>
-			<tr>
-				<td>NIK</td>
-				<td>:</td>
-				<td>
-					<?php echo $data['nik']; ?>
-				</td>
-			</tr>
-			<tr>
-				<td>Nama</td>
-				<td>:</td>
-				<td>
-					<?php echo $data['nama']; ?>
-				</td>
-			</tr>
-			<tr>
-				<td>TTL</td>
-				<td>:</td>
-				<td>
-					<?php echo $data['tempat_lh']; ?>/
-					<?php echo $data['tgl_lh']; ?>
-				</td>
-			</tr>
-			<?php } ?>
-		</tbody>
-	</table>
-	<p>Adalah benar-benar warga Desa Tamantirto, Kecamatan Kasihan, Kabupuaten Bantul</P>
-	<p>Demikian Surat ini dibuat, agar dapat digunakan sebagai mana mestinya.</P>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<p align="right">
-		Bantul,
-		<?php echo $tgl; ?>
-		<br> KEPALA DESA TAMANTIRTO
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>(         WISNU ARDI           )
-	</p>
+    <p>Adalah benar-benar warga Desa Tamantirto, Kecamatan Kasihan, Kabupaten Bantul.</p>
+    <p>Demikian Surat ini dibuat agar dapat digunakan sebagaimana mestinya.</p>
 
+    <p align="right">
+        Bantul, <?php echo $tgl; ?><br>
+        KEPALA DESA TAMANTIRTO<br><br><br><br>
+        ( WISNU ARDI )
+    </p>
+</center>
 
-	<script>
-		window.print();
-	</script>
-
+<script>
+    window.print();
+</script>
 </body>
-
 </html>

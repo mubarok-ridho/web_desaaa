@@ -1,116 +1,151 @@
- <!-- Main Sidebar Container -->
- <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: #042165;">
-   <a href="<?= $base_url; ?>dashboard" class="brand-link">
-     <img src="<?= $base_url; ?>dist/img/<?= $row_profil->logo_desa; ?>" alt="Logo" class="brand-image">
-     <span class="brand-text font-weight-light"><?= $row_profil->nama_desa; ?></span>
-   </a>
-   <!-- Sidebar -->
-   <div class="sidebar">
-     <!-- Sidebar user (optional) -->
-     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-       <div class="image">
-         <img src="<?= $base_url; ?>dist/img/0.png" alt="User Image">
-       </div>
-       <div class="info">
-         <a href="<?= $base_url; ?>dashboard" class="d-block"><?= $_SESSION['nama']; ?></a>
-       </div>
-     </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-     <!-- Sidebar Menu -->
-     <nav class="mt-2">
-       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-         <!-- Add icons to the links using the .nav-icon class
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: #042165;">
+  <a href="<?= $base_url; ?>dashboard" class="brand-link">
+    <img src="<?= $base_url; ?>dist/img/<?= $row_profil->logo_desa; ?>" alt="Logo" class="brand-image">
+    <span class="brand-text font-weight-light"><?= $row_profil->nama_desa; ?></span>
+  </a>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="image">
+        <img src="<?= $base_url; ?>dist/img/0.png" alt="User Image">
+      </div>
+      <div class="info">
+        <a href="<?= $base_url; ?>dashboard" class="d-block"><?= $_SESSION['nama']; ?></a>
+      </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library -->
-         <li class="nav-item has-treeview">
-           <a href="<?= $base_url; ?>dashboard" class="nav-link">
-             <i class="nav-icon fas fa-tachometer-alt"></i>
-             <p>
-               Dashboard
-             </p>
-           </a>
+        <li class="nav-item has-treeview">
+          <a href="<?= $base_url; ?>dashboard" class="nav-link">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>
+              Dashboard
+            </p>
+          </a>
 
-         </li>
-
-         <li class="nav-item has-treeview">
-           <a href="<?= $base_url; ?>data_kependudukan" class="nav-link">
-             <i class="nav-icon fas fa-users"></i>
-             <p>
-               Data Kependudukan
-             </p>
-           </a>
-         </li>
+        </li>
 
         <li class="nav-item has-treeview">
-           <a href="<?= $base_url; ?>data_kependudukan" class="nav-link">
-             <i class="nav-icon fas fa-users"></i>
-             <p>
-               Data Kartu Keluarga
-             </p>
-           </a>
-         </li>
+          <a href="<?= $base_url; ?>data_kependudukan" class="nav-link">
+            <i class="nav-icon fas fa-users"></i>
+            <p>
+              Data Kependudukan
+            </p>
+          </a>
+        </li>
 
         <li class="nav-item has-treeview">
-           <a href="<?= $base_url; ?>data_kartu" class="nav-link">
-             <i class="nav-icon fas fa-users"></i>
-             <p>
-               Data KK dan Anggota
-             </p>
-           </a>
-         </li>
+          <a href="<?= $base_url; ?>data_kependudukan" class="nav-link">
+            <i class="nav-icon fas fa-users"></i>
+            <p>
+              Data Kartu Keluarga
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item has-treeview">
+          <a href="<?= $base_url; ?>data_kartu_kk" class="nav-link">
+            <i class="nav-icon fas fa-users"></i>
+            <p>
+              Data KK dan Anggota
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item has-treeview">
+          <a href="<?= $base_url; ?>data_kondisi_rumah" class="nav-link">
+            <i class="nav-icon fas fa-door-closed"></i>
+            <p>
+              Data Kondisi Rumah
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item has-treeview">
+          <a href="<?= $base_url; ?>data_klasifikasi_kependudukan" class="nav-link">
+            <i class="nav-icon fas fa-sort-numeric-up"></i>
+            <p>
+              Klasifikasi Penduduk
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item has-treeview">
+          <a href="<?= $base_url; ?>data_klasifikasi_bantuan" class="nav-link">
+            <i class="nav-icon fas fa-hands-helping"></i>
+            <p>
+              Klasifikasi Bantuan
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-file"></i>
+            <p>
+              Kelola Surat
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?= $base_url; ?>surat/suket_domisili.php" class="nav-link">
+                <i class="far fa-circle nav-icon text-warning"></i>
+                <p>Surat Keterangan Domisili</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?= $base_url; ?>surat/suket_lahir.php" class="nav-link">
+                <i class="far fa-circle nav-icon text-warning"></i>
+                <p>Surat Keterangan Kelahiran</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?= $base_url; ?>surat/suket_mati.php" class="nav-link">
+                <i class="far fa-circle nav-icon text-warning"></i>
+                <p>Surat Keterangan Kematian</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?= $base_url; ?>surat/suket_datang.php" class="nav-link">
+                <i class="far fa-circle nav-icon text-warning"></i>
+                <p>Surat Keterangan Pendatang</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?= $base_url; ?>surat/suket_pindah.php" class="nav-link">
+                <i class="far fa-circle nav-icon text-warning"></i>
+                <p>Surat Keterangan Pindah</p>
+              </a>
+            </li>
+          </ul>
+        </li>
 
 
-         <li class="nav-item has-treeview">
-           <a href="<?= $base_url; ?>data_kondisi_rumah" class="nav-link">
-             <i class="nav-icon fas fa-door-closed"></i>
-             <p>
-               Data Kondisi Rumah
-             </p>
-           </a>
-         </li>
-
-         <li class="nav-item has-treeview">
-           <a href="<?= $base_url; ?>data_klasifikasi_kependudukan" class="nav-link">
-             <i class="nav-icon fas fa-sort-numeric-up"></i>
-             <p>
-               Klasifikasi Penduduk
-             </p>
-           </a>
-         </li>
-
-         <li class="nav-item has-treeview">
-           <a href="<?= $base_url; ?>data_klasifikasi_bantuan" class="nav-link">
-             <i class="nav-icon fas fa-hands-helping"></i>
-             <p>
-               Klasifikasi Bantuan
-             </p>
-           </a>
-         </li>
-
-          <li class="nav-item has-treeview">
-           <a href="<?= $base_url; ?>data_klasifikasi_surat" class="nav-link">
-             <i class="nav-icon fas fa-hands-helping"></i>
-             <p>
-               Kelola Surat
-             </p>
-           </a>
-         </li>
-
-         <li class="nav-item has-treeview">
-           <a href="<?= $base_url; ?>control_panel" class="nav-link">
-             <i class="nav-icon fas fa-cog"></i>
-             <p>
-               Control Panel
-             </p>
-           </a>
-         </li>
+        <li class="nav-item has-treeview">
+          <a href="<?= $base_url; ?>control_panel" class="nav-link">
+            <i class="nav-icon fas fa-cog"></i>
+            <p>
+              Control Panel
+            </p>
+          </a>
+        </li>
 
 
-       </ul>
+      </ul>
 
 
 
-     </nav>
-     <!-- /.sidebar-menu -->
-   </div>
-   <!-- /.sidebar -->
- </aside>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>

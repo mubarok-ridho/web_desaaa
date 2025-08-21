@@ -1,4 +1,5 @@
 <?php error_reporting(0); ?>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
 <!-- Content Header -->
 <section class="content-header">
@@ -128,7 +129,10 @@ if (isset($_POST['import_kk'])) {
 
       const selectedTab = $(this).data('tab');
       if (selectedTab === 'penduduk') {
-        location.href = 'data_kependudukan';
+        $('#tab-content').html(`<?php include 'app/post/post_data_kependudukan.php'; ?>`);
+  $('#uploadCSVKKContainer').hide();
+          location.href = 'data_kependudukan';
+
       } else if (selectedTab === 'kk') {
         $('#tab-content').load('views/pages/user/data_kartu_kk.php');
         $('#uploadCSVKKContainer').show();
